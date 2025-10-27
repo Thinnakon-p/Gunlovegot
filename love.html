@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>การ์ดรัก - เลย์เอาต์ซ้าย-กลาง-ขวา</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+   :root{
+    --bg:#0b0a0b;
+    --gold:#c89b4a;
+    --accent:#f8f4ef;
+  }
+  body{
+    margin:0; min-height:100vh;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(200,155,74,0.04), transparent), var(--bg);
+    color:var(--accent);
+    overflow-x:hidden;
+    touch-action: pan-y;
+  }
+
+  .stage {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+    padding:24px;
+    min-height:100vh;
+    position:relative;
+    z-index:5;
+    flex-wrap: wrap;
+  }
+
+  .person {
+    width:140px;
+    height:190px;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    border:1px solid rgba(255,255,255,0.04);
+    flex:0 0 auto;
+    cursor:pointer;
+    transition: transform 0.2s ease;
+  }
+  .person:active { transform: scale(0.95); }
+  .person img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .middle {
+    display:flex; flex-direction:column; align-items:center; gap:16px; 
+    width:100%; max-width: 600px;
+    flex: 1;
+  }
+
+  .mid-text {
+    text-align:center;
+    font-weight:600;
+    color:var(--gold);
+    font-size:16px;
+    letter-spacing:0.6px;
+    padding:10px 18px;
+    border-radius:999px;
+    background: linear-gradient(90deg, rgba(200,155,74,0.06), rgba(255,255,255,0.01));
+    border:1px solid rgba(200,155,74,0.09);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90vw;
+  }
+
+  .card {
+    width:100%;
+    max-width: 100%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+    border-radius:18px;
+    padding:20px;
+    box-shadow: 0 18px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
+    border:1px solid rgba(200,155,74,0.12);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .card-header { 
+    display:flex; 
+    align-items:center; 
+    justify-content:space-between; 
+    gap:12px; 
+    flex-wrap: wrap;
+  }
+  .title { 
+    font-size:19px; 
+    color:var(--gold); 
+    font-weight:700; 
+    line-height:1.3;
+  }
+  .subtitle { 
+    color:rgba(255,255,255,0.78); 
+    font-size:13px; 
+  }
+
+  .timer { 
+    display:flex; 
+    gap:8px; 
+    margin-top:12px; 
+    flex-wrap:wrap; 
+    justify-content: center;
+  }
+  .pill {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+    border:1px solid rgba(200,155,74,0.08);
+    padding:10px 12px; 
+    border-radius:10px; 
+    min-width:72px; 
+    text-align:center; 
+    font-weight:600; 
+    color:var(--accent);
+    font-size:15px;
+  }
+  .pill .label { 
+    color:rgba(255,255,255,0.65); 
+    font-size:11px; 
+    margin-top:3px; 
+  }
+
+  .wave-wrap { 
+    margin-top:14px; 
+    position:relative; 
+    height:140px; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    overflow: hidden;
+  }
+  svg.heartbeat { 
+    width:100%; 
+    height:130px; 
+    overflow:visible; 
+  }
+
+  .center-heart { 
+    position:absolute; 
+    transform:translate(-50%,-50%); 
+    left:50%; top:50%; 
+    width:64px; height:64px; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    pointer-events:none; 
+    z-index:8; 
+  }
+  .center-heart svg { 
+    width:100%; height:100%; 
+    transform-origin:center; 
+    animation: beat 920ms ease-in-out infinite; 
+    filter: drop-shadow(0 8px 20px rgba(200,155,74,0.16)); 
+  }
+
+  /* Mobile Layout */
+  @media (max-width: 768px) {
+    .stage {
+      flex-direction: column;
+      padding:16px;
+      gap:16px;
+    }
+    .person {
+      width:110px;
+      height:150px;
+    }
+    .middle {
+      gap:14px;
+    }
+    .mid-text {
+      font-size:15px;
+      padding:8px 16px;
+      max-width: 85vw;
+    }
+    .card {
+      padding:16px;
+    }
+    .title {
+      font-size:18px;
+    }
+    .timer {
+      gap:6px;
+    }
+    .pill {
+      min-width:64px;
+      padding:8px 10px;
+      font-size:14px;
+    }
+    .pill .label {
+      font-size:10px;
+    }
+    .wave-wrap {
+      height:120px;
+    }
+    svg.heartbeat {
+      height:110px;
+    }
+    .center-heart {
+      width:56px;
+      height:56px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stage {
+      padding:12px;
+    }
+    .person {
+      width:90px;
+      height:125px;
+    }
+    .mid-text {
+      font-size:14px;
+      padding:7px 14px;
+    }
+    .title {
+      font-size:17px;
+    }
+    .subtitle {
+      font-size:12px;
+    }
+    .playBtn {
+      font-size:14px;
+      padding:10px 16px;
+    }
+    .pill {
+      min-width:58px;
+      padding:7px 8px;
+      font-size:13px;
+    }
+    .center-heart {
+      width:48px;
+      height:48px;
+    }
+  }
+
+  /* Button improvements */
+  #playBtn {
+    padding:10px 18px;
+    border-radius:8px;
+    font-weight:600;
+    transition: all 0.2s ease;
+    touch-action: manipulation;
+  }
+  #playBtn:active {
+    transform: scale(0.95);
+  }
+  </style>
+</head>
+<body>
+  <!-- Background falling elements (behind everything) -->
+  <div id="bgFall" style="position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;"></div>
+
+  <div class="stage" id="stage">
+    <!-- Left person (click to change) -->
+    <div class="person" id="personLeft" title="คลิกเพื่อเปลี่ยนรูปซ้าย">
+      <img id="leftImg" src="https://scontent.fbkk5-7.fna.fbcdn.net/v/t39.30808-6/511276362_1249029406714776_597894874405513988_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=107&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=vvNtY8HQZQsQ7kNvwGM1zZh&_nc_oc=AdktqVDRl81lM4GVt2Kk8MwB8CoRFIBzGro_V1_Ypwa7mkuXKP-3kSPSVXLlQkCQDQY&_nc_zt=23&_nc_ht=scontent.fbkk5-7.fna&_nc_gid=z4H8PM2KMLLOtR7PjzGBSA&oh=00_AfdUCQ8yj68SW-eZhgwX8DWsWkCXb6AT7ErsJpf5BsL6kg&oe=69057078" alt="person left">
+    </div>
+
+    <!-- middle column -->
+    <div class="middle">
+      <div class="mid-text" id="midText">เวลาที่เราได้ย่างก้าวสุ่ความสัมพันธ์-กันร์ก๊อต</div>
+
+      <div class="card" id="card">
+        <div class="card-header">
+          <div>
+            <div class="title">is time has story</div>
+            <div class="subtitle">love you well na </div>
+          </div>
+          <div>
+            <button id="playBtn" class="px-3 py-1 rounded-md bg-amber-500 text-black font-semibold">เล่นเพลง</button>
+          </div>
+        </div>
+
+        <div class="timer">
+          <div class="pill"><div id="days">0</div><div class="label">วัน</div></div>
+          <div class="pill"><div id="hours">00</div><div class="label">ชั่วโมง</div></div>
+          <div class="pill"><div id="minutes">00</div><div class="label">นาที</div></div>
+          <div class="pill"><div id="seconds">00</div><div class="label">วินาที</div></div>
+        </div>
+
+        <div class="wave-wrap" id="waveWrap">
+          <svg class="heartbeat" viewBox="0 0 1000 140" preserveAspectRatio="xMidYMid meet" id="heartbeatSVG">
+            <defs>
+              <linearGradient id="metalGrad" x1="0" x2="1">
+                <stop offset="0%" stop-color="#f7e9c7"/>
+                <stop offset="50%" stop-color="#c89b4a"/>
+                <stop offset="100%" stop-color="#6b4f3a"/>
+              </linearGradient>
+            </defs>
+            <path id="wave" class="wave-path" d=""></path>
+            <g id="joinHearts"></g>
+          </svg>
+
+          <div class="center-heart" id="centerHeart">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#ffb86b" d="M12 21s-6.7-4.6-9.3-7.2C-0.3 10.7 1.6 5.7 6 4.5c2.2-.6 4.5.2 6 2 1.5-1.8 3.8-2.6 6-2 4.4 1.2 6.3 6.2 3.3 9.3-2.6 2.6-9.3 7.2-9.3 7.2z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right person -->
+    <div class="person" id="personRight" title="คลิกเพื่อเปลี่ยนรูปขวา">
+      <img id="rightImg" src="https://scontent.fbkk5-4.fna.fbcdn.net/v/t1.15752-9/563875523_2003189580495837_8825620243732643782_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=v57-zOjlQUIQ7kNvwGAFMPs&_nc_oc=AdnX12yqipzCXXhBYfd9oGKDMZKsWifNGX_fah8rnAKY6gHfN-W_KOG3RTfBJtOqIzM&_nc_zt=23&_nc_ht=scontent.fbkk5-4.fna&oh=03_Q7cD3gGjk45L0n3Y4fARrXVWoLQrTZCx1rf38LmimlMrl2bLxQ&oe=6926EC24" alt="person right">
+    </div>
+  </div>
+
+  <!-- Audio -->
+  <audio id="bgAudio" loop crossorigin="anonymous">
+    <source src="Gigi Perez - Sailor Song [Official Music Video].mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+  // CONFIG
+  const startDate = new Date("2025-10-17T19:30:00");
+
+  // Elements
+  const daysEl = document.getElementById('days');
+  const hoursEl = document.getElementById('hours');
+  const minutesEl = document.getElementById('minutes');
+  const secondsEl = document.getElementById('seconds');
+  const audio = document.getElementById('bgAudio');
+  const playBtn = document.getElementById('playBtn');
+  let playing = false;
+
+  // TIMER
+  function updateTimer(){
+    const now = new Date();
+    let diff = Math.floor((now - startDate)/1000);
+    if(diff < 0) diff = 0;
+    const days = Math.floor(diff / 86400); diff %= 86400;
+    const hours = Math.floor(diff / 3600); diff %= 3600;
+    const minutes = Math.floor(diff / 60); const seconds = diff % 60;
+    daysEl.textContent = days;
+    hoursEl.textContent = String(hours).padStart(2,'0');
+    minutesEl.textContent = String(minutes).padStart(2,'0');
+    secondsEl.textContent = String(seconds).padStart(2,'0');
+  }
+  updateTimer();
+  setInterval(updateTimer, 1000);
+
+  // WAVE
+  const wavePath = document.getElementById('wave');
+  const joinHearts = document.getElementById('joinHearts');
+  const waveCfg = { segments: 26, baseFreq: 3, peaks: [0.28,0.63,0.86] };
+
+  function makeWave(amplitude=8, spike=36, jitter=1.6){
+    const W = 1000, centerY = 70, seg = waveCfg.segments;
+    const pts = [];
+    for(let i=0;i<=seg;i++){
+      const t = i/seg;
+      const x = t*W;
+      let y = centerY + Math.sin(t * Math.PI * waveCfg.baseFreq + (Math.random()-0.5)*0.3)*amplitude;
+      waveCfg.peaks.forEach(p=>{
+        const d = Math.abs(t - p - (Math.random()-0.5)*0.02);
+        if(d < 0.035) y -= (1 - d/0.035) * spike * (0.9 + Math.random()*0.4);
+      });
+      y += Math.cos(t * Math.PI * 10) * jitter * (0.6 + Math.random()*0.8);
+      pts.push({x,y});
+    }
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+    for(let i=1;i<pts.length;i++){
+      const p0 = pts[i-1], p1 = pts[i], cx = (p0.x + p1.x)/2;
+      d += ` Q ${cx} ${p0.y} ${p1.x} ${p1.y}`;
+    }
+    wavePath.setAttribute('d', d);
+
+    joinHearts.innerHTML = '';
+    waveCfg.peaks.forEach((p, idx)=>{
+      const x = Math.max(40, Math.min(W-40, (p + (Math.random()-0.5)*0.02)*W));
+      const y = centerY - (idx%2===0?28:22) + (Math.random()-0.5)*6;
+      const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.setAttribute('transform', `translate(${x-10}, ${y-10})`);
+      g.innerHTML = `<path class="heart-small" d="M10 3.4c1.6-3.2 6.6-2.6 8 1.2 1.6 4.2-3.6 8.0-8 11.4-4.4-3.4-9.6-7.2-8-11.4 1.4-3.8 6.4-4.4 8-1.2z"/>`;
+      joinHearts.appendChild(g);
+    });
+  }
+
+  function beatPatternLoop(){
+    const isShort = Math.random() < 0.65;
+    if(isShort){
+      waveCfg.baseFreq = 3 + Math.random()*1.2;
+      makeWave(6 + Math.random()*3, 26 + Math.random()*8, 1.2);
+      setTimeout(beatPatternLoop, 700 + Math.random()*1000);
+    } else {
+      waveCfg.baseFreq = 2 + Math.random()*0.6;
+      makeWave(10 + Math.random()*4, 36 + Math.random()*16, 2.2);
+      setTimeout(beatPatternLoop, 1400 + Math.random()*1600);
+    }
+  }
+  beatPatternLoop();
+
+  let sway=0;
+  setInterval(()=>{ 
+    sway+=0.02; 
+    const tx=Math.sin(sway)*6; 
+    wavePath.style.transform=`translateX(${tx}px)`; 
+    joinHearts.style.transform=`translateX(${tx}px)`; 
+  },40);
+
+  // BACKGROUND FALLING
+  const bgFall = document.getElementById('bgFall');
+  const colors = ['#ffd98a','#f7e5c8','#e6c27a','#fff'];
+
+  function spawnBg(){
+    const isStar = Math.random() < 0.5;
+    const el = document.createElement('div');
+    el.style.position='absolute';
+    const left = Math.random()*100;
+    el.style.left = left + 'vw';
+    el.style.top = '-40px';
+    const s = 6 + Math.random()*20;
+    el.style.width = s + 'px'; el.style.height = s + 'px';
+    el.style.zIndex = 1;
+    el.style.opacity = 0;
+    el.style.pointerEvents = 'none';
+    const dur = 6 + Math.random()*8;
+    el.style.transition = `transform ${dur}s linear, opacity ${dur}s linear`;
+    if(isStar){
+      const svg = `<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="${colors[Math.floor(Math.random()*colors.length)]}" d="M12 2l2.9 6.1L21 9.2l-5 4.3L17 21l-5-3-5 3 1-7.5L3 9.2l6.1-1.1z"/></svg>`;
+      el.innerHTML = svg;
+    } else {
+      const col = colors[Math.floor(Math.random()*colors.length)];
+      const svg = `<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="${col}" d="M12 21s-6.7-4.6-9.3-7.2C-0.3 10.7 1.6 5.7 6 4.5c2.2-.6 4.5.2 6 2 1.5-1.8 3.8-2.6 6-2 4.4 1.2 6.3 6.2 3.3 9.3-2.6 2.6-9.3 7.2-9.3 7.2z"/></svg>`;
+      el.innerHTML = svg;
+    }
+    bgFall.appendChild(el);
+    requestAnimationFrame(()=> {
+      el.style.opacity = 1;
+      el.style.transform = `translateY(120vh) rotate(${Math.random()*360}deg)`;
+    });
+    setTimeout(()=>{ if(el.parentNode) bgFall.removeChild(el); }, (dur+0.3)*1000);
+  }
+  setInterval(spawnBg, 420);
+  setInterval(() => { for(let i=0;i<6;i++) setTimeout(spawnBg, i*120); }, 7000);
+
+  // AUDIO
+  playBtn.addEventListener('click', async ()=>{
+    try{
+      if(!playing){ 
+        await audio.play(); 
+        playing=true; 
+        playBtn.textContent='หยุดเพลง'; 
+        playBtn.classList.remove('bg-amber-500', 'text-black');
+        playBtn.classList.add('bg-green-400', 'text-black');
+      } else { 
+        audio.pause(); 
+        playing=false; 
+        playBtn.textContent='เล่นเพลง'; 
+        playBtn.classList.remove('bg-green-400');
+        playBtn.classList.add('bg-amber-500', 'text-black');
+      }
+    }catch(e){ console.warn(e); }
+  });
+
+  window.addEventListener('load', ()=>{ 
+    audio.volume=0.55; 
+    setTimeout(()=>audio.play().then(()=>{playing=true; playBtn.textContent='หยุดเพลง'; playBtn.classList.remove('bg-amber-500'); playBtn.classList.add('bg-green-400');}).catch(()=>{}),700); 
+  });
+
+  // CHANGE PHOTOS
+  document.getElementById('personLeft').addEventListener('click', ()=>{
+    const url = prompt('วาง URL รูปคนซ้าย (หรือยกเลิก):');
+    if(url) document.getElementById('leftImg').src = url;
+  });
+  document.getElementById('personRight').addEventListener('click', ()=>{
+    const url = prompt('วาง URL รูปคนขวา (หรือยกเลิก):');
+    if(url) document.getElementById('rightImg').src = url;
+  });
+
+  // CHANGE TEXT
+  const midTextEl = document.getElementById('midText');
+  midTextEl.addEventListener('click', ()=>{
+    const txt = prompt('แก้ข้อความตรงกลาง:', midTextEl.textContent);
+    if(txt !== null) midTextEl.textContent = txt;
+  });
+
+  // Adjust wave on resize
+  window.addEventListener('resize', () => {
+    setTimeout(makeWave, 100);
+  });
+  </script>
+</body>
+</html>
